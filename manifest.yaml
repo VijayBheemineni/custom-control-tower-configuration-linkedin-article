@@ -1,0 +1,26 @@
+---
+region: us-east-2
+version: 2021-03-15
+enable_stack_set_deletion: true
+resources:
+  - name: vijay-cfct-block-s3-public-access-linkedin
+    description: Vijay Test Linkedin CFCT SCP block S3 buckets to have public access
+    resource_file: policies/block-s3-public.json
+    deployment_targets:
+      organizational_units:
+        - Root
+    deploy_method: scp
+
+  - name: vijay-cfct-ssm-parameter-test-linkedin
+    resource_file: templates/ssm-parameter-test.template
+    parameter_file: parameters/ssm-parameter-test-parameters.json
+    deploy_method: stack_set
+    deployment_targets:
+      accounts:
+        - Sandbox2-TestConceptsDelete
+    export_outputs:
+      - name: /org/member/test-ssm/app-id
+        value: $[output_ApplicationId]
+    regions:
+      - us-east-2
+      - us-east-1

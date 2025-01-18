@@ -1,0 +1,48 @@
+name: cfct customization zip and upload to s3
+
+on:
+    push: 
+        branches: 
+            - main
+
+jobs:
+    create_cfct_zip_file_job:
+      runs-on: ubuntu-latest
+      steps:
+          - name: checkout repo code
+            uses: actions/checkout@v4
+
+          - name: Zip the Repository
+            run: |
+              mkdir dist
+              zip -r dist/custom-control-tower-configuration.zip . -x "*.git*"
+
+          - name: upload cfct zip file artifact
+            uses: actions/upload-artifact@v4
+            with:
+              name: custom-control-tower-configuration.zip
+              path: dist/custom-control-tower-configuration.zip
+          
+          
+    upload_cfct_zip_file_to_s3_job:
+      needs: create_cfct_zip_file_job
+      runs-on: ubuntu-latest
+      permissions:
+        id-token: write
+        contents: read
+      steps:
+        - name: set aws credentials
+          uses: aws-actions/configure-aws-credentials@v4
+          with:
+            aws-region: ${{ vars.AWS_DEFAULT_REGION }}
+            role-to-assume: ${{ secrets.AWS_OIDC_ROLE_ARN }}
+
+        - name: download cfct zip file artifact
+          uses: actions/download-artifact@v4
+          with:
+            name: custom-control-tower-configuration.zip
+        
+        - name: Push to S3
+          run: |
+            aws s3 cp custom-control-tower-configuration.zip s3://${{ vars.S3_CFCT_BUCKET_NAME }}
+    

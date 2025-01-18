@@ -1,0 +1,20 @@
+---
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Vijay CFCT create ssm parameter for testing
+Parameters:
+  ApplicationId:
+    Description: APP ID for the account
+    Type: String
+    Default: 'VijayCFCTTestLinkedin'
+Resources:
+  ApplicationIdParam:
+    Type: "AWS::SSM::Parameter"
+    Properties:
+      Description: APP ID for the account
+      Name: /Vijay/cfct/ApplicationIdLinkedin
+      Type: String
+      Value: !Ref ApplicationId
+Outputs:
+  ApplicationId:
+    Description: App ID
+    Value: !Ref ApplicationId

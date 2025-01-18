@@ -1,0 +1,11 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "VijayCFCTS3PublicAccessBlockLinkedin",
+            "Effect": "Deny",
+            "Action": "s3:PutAccountPublicAccessBlock",
+            "Resource": "arn:aws:s3:::*"
+        }
+    ]
+}
