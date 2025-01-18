@@ -17,7 +17,7 @@ resources:
     deploy_method: stack_set
     deployment_targets:
       accounts:
-        - Sandbox2-TestConceptsDelete
+        - Sandbox2-TestConcepts
     export_outputs:
       - name: /org/member/test-ssm/app-id
         value: $[output_ApplicationId]
